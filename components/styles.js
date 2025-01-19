@@ -1,0 +1,185 @@
+import styled from 'styled-components';
+import {View, Text, Image,TextInput, TouchableOpacity } from 'react-native';
+import Constants from 'expo-constants';
+
+const StatusBarHeight = Constants.statusBarHeight;
+
+
+//colors
+export const Colors = {
+    green_cl: '#72AC57',
+    pearpl_cl: '#7D0DDE',
+    blue_cl: '#034078',
+    dark_blue_cl:'#001F54',
+    bb_blue_cl: '#1282A2',
+    red_cl: '#FA1E08',
+    white_cl: '#FEFCFB',
+    black_cl: '#0A1128',
+    gray_cl: '#F2F2F2',
+    yellow_cl: '#FBED35',
+    dark_gray: '#ABABAB',
+    bb_brown_cl: '#ECB797',
+
+
+};
+
+const { green_cl, pearpl_cl , blue_cl, red_cl, white_cl , black_cl , gray_cl , yellow_cl,bb_blue_cl,dark_blue_cl,bb_brown_cl } = Colors;
+
+export const StyledContainer = styled.View`
+    flex: 1;
+    padding: 0px;
+    padding-top: ${StatusBarHeight +30}px;
+    background-color: ${white_cl};
+    `;
+export const InnerConatiner =styled.View`
+    flex: 1;
+    width: '100%';
+    align-items: center;  
+     
+    `;
+
+
+export const Background = styled.ImageBackground`
+    flex: 1;
+    width: 100%;
+  justify-content: center;
+  align-items: center;
+  
+ `;
+
+ export const Overlay = styled.View`
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background-color: rgba(0, 0, 0, 0.1); /* Σκοτεινή διαφάνεια */
+`;
+
+export const LoginContainer = styled.View`
+  width: 95%;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.8); /* Λευκό με διαφάνεια */
+  align-items: center;
+  margin-top: 230px;
+`;
+
+
+export const PageTitle = styled.Text`
+    font-size: 30px;
+    text-align: center;
+    font-weight: bold;
+    color: ${dark_blue_cl};
+    padding: 0px;
+    font-family: 'Roboto';
+`;
+
+export const SubTitle = styled.Text`
+    font-size: 18px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    color: ${bb_blue_cl};
+`;
+
+export const StyledFormArea = styled.View`
+    width: 95%;
+`;
+
+export const StyledInputText = styled.TextInput`
+    padding: 10px;
+    padding-left: 55px;
+    padding-right: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    height: 60px;
+    margin-vertical: 3px;
+    margin-bottom: 10px;
+    border-width: 1px;
+    border-color: #ccc;
+`;
+export const StyledInputLabel = styled.Text`
+    font-size: 13px;
+    text-align: left;
+`;
+
+export const LeftIcon = styled.View`
+    left: 15px;
+    top: 38px;
+    position: absolute;
+    z-index: 1;
+`;
+
+export const RightIcon = styled.TouchableOpacity`
+    right: 15px;
+    top: 38px;
+    position: absolute;
+    z-index: 1;
+`;
+export const StyledButton = styled.TouchableOpacity`
+    padding: 15px;
+    justify-content: center;
+    border-radius: 5px;
+    margin-vertical: 5px;
+    height: 60px;
+    align-items: center;
+    background-color: ${bb_blue_cl};
+
+    ${(props) => props.google == true && `
+        background-color: ${bb_brown_cl};
+        flex-direction: row;
+        justify-content: center;
+    
+    `}
+
+
+`;
+export const ButtonText = styled.Text`
+    font-size: 14px;
+    color: ${white_cl};
+
+
+    ${(props) => props.google == true && `
+       padding-left: 5px;
+       padding-top: 2px;
+       paddind-bottom: 2px;
+       padding-right: 5px;
+    
+    `}
+`;
+
+export const MsgBox = styled.Text`
+    text-align: center;
+    font-size: 13px;
+`;
+
+export const Line = styled.View`
+    height: 1px;
+    width: 100%;
+    background-color: ${black_cl};
+    margin-vertical: 10px;
+`;
+
+export const ExtraView = styled.View`
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+`;
+
+export const ExtraText = styled.Text`
+    justify-content: center;
+    align-content: center;
+    color: ${bb_blue_cl};
+    font-size: 15px;
+`;
+
+export const TextLink = styled.TouchableOpacity`
+    justify-content: center;
+    align-items: center;
+`;
+export const TextLinkContent =styled.Text`
+    color: ${bb_brown_cl};
+    font-size: 15px;
+`;
