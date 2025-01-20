@@ -99,6 +99,19 @@ export const StyledInputText = styled.TextInput`
     border-width: 1px;
     border-color: #ccc;
 `;
+export const StyledInputProfileText = styled.TextInput`
+    padding: 20px;
+    padding-left: 50px;
+    padding-right: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    height: 60px;
+    margin-vertical: 3px;
+    margin: 10px;
+    border-width: 1px;
+    border-color: #ccc;
+    width: 90%;
+`;
 export const StyledInputLabel = styled.Text`
     font-size: 13px;
     text-align: left;
@@ -109,6 +122,27 @@ export const LeftIcon = styled.View`
     top: 38px;
     position: absolute;
     z-index: 1;
+`;
+
+export const ProfileImage = styled.View`
+    width: 150;
+    height: 150;
+    borderRadius: 75;
+    marginBottom: 10;
+`;
+export const pickerStyle=styled.View`
+    height: 150;
+    width: "80%";
+    color: bb_blue_cl;
+    textAlign: 'center';
+    border: 10px;
+
+`;
+
+
+export const Error = styled.View`
+     color: 'red';
+     marginBottom: 10;
 `;
 
 export const RightIcon = styled.TouchableOpacity`
@@ -183,3 +217,4 @@ export const TextLinkContent =styled.Text`
     color: ${bb_brown_cl};
     font-size: 15px;
 `;
+

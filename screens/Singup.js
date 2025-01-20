@@ -105,7 +105,7 @@ const Singup = ({navigation}) => {
         <StyledContainer>
             <StatusBar style="dark" />
             <InnerConatiner>
-            <PageTitle>Tennis Players</PageTitle>
+            <PageTitle>Work World</PageTitle>
                 
                         <SubTitle>Account SignUp</SubTitle>
 

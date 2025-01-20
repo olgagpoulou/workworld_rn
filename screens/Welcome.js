@@ -53,8 +53,8 @@ const Welcome = ({navigation}) => {
         <StyledContainer>
             <StatusBar style="dark" />
             <InnerConatiner>
-            <PageTitle>Tennis Players</PageTitle>
-                <Background resizeMode="cover" source={require('./../assets/images/back_image_d.png')}>
+            <PageTitle>Work World</PageTitle>
+                <Background resizeMode="cover" source={require('./../assets/images/ww1.jpg')}>
                   <Overlay />
                   
                     <LoginContainer>

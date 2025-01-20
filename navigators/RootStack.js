@@ -15,6 +15,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'; // 
 import Login from './../screens/Login';
 import Singup from './../screens/Singup';
 import Welcome from './../screens/Welcome';
+import Profile from './../screens/Profile';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,9 +35,9 @@ const RootStack = () => {
                 }
                
                 }}
-                 initialRouteName="Login"
+                 initialRouteName="Profile"
             >
-               
+                <Stack.Screen name="Profile" component={Profile}/>
                 <Stack.Screen name="Login" component={Login}/>
                 <Stack.Screen name="Singup" component={Singup}/>
                 <Stack.Screen name="Welcome" component={Welcome}/>
