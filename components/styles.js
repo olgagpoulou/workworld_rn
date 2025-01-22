@@ -124,11 +124,11 @@ export const LeftIcon = styled.View`
     z-index: 1;
 `;
 
-export const ProfileImage = styled.View`
-    width: 150;
-    height: 150;
-    borderRadius: 75;
-    marginBottom: 10;
+export const ProfileImage = styled.Image`
+    width: 150px;
+    height: 150px;
+    borderRadius: 75px;
+    marginBottom: 10px;
 `;
 export const pickerStyle=styled.View`
     height: 150;

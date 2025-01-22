@@ -86,6 +86,12 @@ const Welcome = ({navigation}) => {
                                 }) => (
                                     <StyledFormArea>
                                         
+                                    <StyledButton onPress={() =>  navigation.navigate("Profile")}>
+                                            <ButtonText >
+                                                Your Job Profile
+                                            </ButtonText>
+                                        </StyledButton>
+                                        
 
 
                                         <StyledButton onPress={() =>  navigation.navigate("Login")}>

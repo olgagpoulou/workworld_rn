@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { View, Text, TextInput, Button, Image , StyleSheet,  Platform , Alert  } from 'react-native';
 import { Formik } from 'formik';
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 import { Picker } from '@react-native-picker/picker';
 import * as Yup from 'yup';
 import * as ImagePicker from 'expo-image-picker'; // Για την επιλογή εικόνας
@@ -25,6 +26,7 @@ import {
     StyledButton,
     ButtonText,
     MsgBox,
+    ProfileImage,
     Line,
     ExtraText,
     ExtraView,
@@ -38,34 +40,36 @@ import styled from 'styled-components';
 
   // import styles from './../components/styles';  
 
+const Profile = ({navigation}) => {
+
+  useEffect(() => {
+    console.log('Profile screen loaded');  // Έλεγχος για φόρτωση
+  }, []);
 
 
-const ProfileScreen = () => {
     const [photo, setPhoto] = useState(null); // Για την αποθήκευση της εικόνας
-
- // Επικύρωση φόρμας με Yup
- const validationSchema = Yup.object({
+  
+  // Επικύρωση φόρμας με Yup
+  const validationSchema = Yup.object().shape({
     jobType: Yup.string().required('Απαιτείται τύπος εργασίας'),
   
-    ministry: Yup.string().when('jobType', {
-      is: 'public',
-      then: Yup.string().required('Απαιτείται Υπουργείο'),
-      otherwise: Yup.string().nullable(),
-    }),
+    ministry: Yup.string().when('jobType', (jobType, schema) =>
+      jobType === 'public' ? schema.required('Απαιτείται Υπουργείο') : schema.nullable()
+    ),
   
-    companyType: Yup.string().when('jobType', {
-      is: 'private',
-      then: Yup.string().required('Απαιτείται τύπος εταιρείας'),
-      otherwise: Yup.string().nullable(),
-    }),
+    companyType: Yup.string().when('jobType', (jobType, schema) =>
+      jobType === 'private' ? schema.required('Απαιτείται τύπος εταιρείας') : schema.nullable()
+    ),
   
-    specialization: Yup.string().when('jobType', {
-      is: 'freelancer',
-      then: Yup.string().required('Απαιτείται ειδικότητα'),
-      otherwise: Yup.string().nullable(),
-    }),
+    specialization: Yup.string().when('jobType', (jobType, schema) =>
+      jobType === 'freelancer' ? schema.required('Απαιτείται ειδικότητα') : schema.nullable()
+    ),
   
-    profilePicture: Yup.mixed().required('Απαιτείται φωτογραφία προφίλ'),
+    profilePicture: Yup.mixed() //εχω προβλημα εδω
+    .required('Απαιτείται φωτογραφία προφίλ')
+    .test('fileExists', 'Πρέπει να επιλέξετε μια εικόνα',
+       (value) => { return  value && value.uri !== 'file://' && value.uri !== '';}),
+
   
     job_name: Yup.string().required('Απαιτείται Φορέας Εργασίας'),
   
@@ -73,16 +77,23 @@ const ProfileScreen = () => {
   
     job_address: Yup.string().required('Απαιτείται Διεύθυνση Εργασίας'),
   
-    Job_phone: Yup.string()
+    job_phone: Yup.string()
       .required('Απαιτείται Τηλέφωνο Εργασίας')
       .matches(/^[0-9]{10}$/, 'Το τηλέφωνο πρέπει να αποτελείται από 10 ψηφία'),
   });
   
+    
 
-   // Χειριστής υποβολής
+
+
+   // ενημερωση του formData με τα δεδομενα και αποστολή(καλώντας την συναρτησ αποστολης)
    const handleSubmit = (values) => {
+    console.log('handleSubmit εκτελέστηκε');
+    console.log('Τιμές από τη φόρμα:', values);
+
     const formData = new FormData();
     formData.append('job_type', values.jobType);
+
     if (values.jobType === 'public') {
       formData.append('ministry', values.ministry);
     } else if (values.jobType === 'private') {
@@ -95,63 +106,119 @@ const ProfileScreen = () => {
     formData.append('job_address', values.job_address);
     formData.append('job_phone', values.job_phone);
 
-
-    if (photo) {
-      formData.append('profile_picture', {
-        uri: photo.uri,
-        name: photo.fileName,
-        type: 'image/jpeg',
-      });
-    }
+  // Προσθήκη της εικόνας αν υπάρχει
+  if (photo && photo.uri) {
+    formData.append('profile_picture', {
+      uri: photo.uri,
+      name: photo.fileName || 'default_image.jpg', // Εάν το fileName δεν υπάρχει, χρησιμοποίησε κάποιο default
+      type: photo.mimeType || 'image/jpeg', // Εάν το mimeType δεν υπάρχει, χρησιμοποίησε 'image/jpeg'
+    });
+  } else {
+    console.log("Δεν επιλέχθηκε εικόνα ή δεν είναι έγκυρη.");
+  }    
+      
+    // Καλούμε την συνάρτηση  που στέλνει τα δεδομένα στο API ώστε πατώντας το button=Υποβολή να διαβαζει τα data απο την φόρμα, να τα αποθηκευσει και να καλει την συναρτηση για αποστολη
+    console.log('Αποστολή δεδομένων στο API:', formData);
+    console.log('Κλήση της συνάρτησης submitProfileData');
+    submitProfileData(formData);
+  
+    console.log('Η συνάρτηση submitProfileData εκτελέστηκε');
+   };
+   
 
 // Αποστολή δεδομένων στο API
-axios
-.put('http://192.168.1.131:8000/profiles/', formData, {
-  headers: {
-    Authorization: `Bearer yourToken`,
-    'Content-Type': 'multipart/form-data',
-  },
-})
-.then((response) => {
-  console.log('Profile updated:', response.data);
-  // Μπορείς να κατευθύνεις τον χρήστη στην επόμενη οθόνη αν θες
-})
-.catch((error) => console.log(error));
+const submitProfileData = async (formData) => {
+  console.log("Δεδομένα που στέλνονται στο API:", formData);  // Προσθήκη για debugging
+  try {
+    // Ανάκτηση του access token από το SecureStore
+    const accessToken = await SecureStore.getItemAsync('accessToken');
+    console.log('Ανακτήθηκε το access token:', accessToken);  // Log για το token
+
+    if (accessToken) {
+      // Στείλε τα δεδομένα στο API με το token στον header
+      const response = await axios.post('http://192.168.1.131:8000/api/profile/create/', formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log('Profile updated successfully:', response.data);
+    } else {
+      console.log('No access token found');
+    }
+  } catch (error) {
+    console.error('Error submitting profile data:', error);
+  }
 };
+
+
 
  // Συνάρτηση για να ανοίξουμε την κάμερα ή το gallery για να επιλέξει εικόνα ο χρήστης
  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+  // Ζητάμε άδεια για τη χρήση της κάμερας και της γκαλερί
+  const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  console.log("Άδεια status:", status);
+  if (status !== 'granted') {
+    alert('Η άδεια για την πρόσβαση στις εικόνες είναι απαραίτητη');
+    return;
+  }
 
-    if (!result.cancelled) {
-      setPhoto(result);
-    }
-  };
+  //απο εδω
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,  
+    allowsEditing: true, // Επιτρέπει την επεξεργασία
+    aspect: [4, 3], // Αναλογία εικόνας (προαιρετικό)
+    quality: 1, // Ποιότητα εικόνας
+  });
+  
+  console.log("Αποτέλεσμα από την βιβλιοθήκη εικόνας:", result);
+
+//εξτρα ελεγχος γιατι ενω επιλεγω εικονα, βγαζει σφαλμα
+if (!result.canceled && result.assets && result.assets[0] && result.assets[0].uri) {
+  console.log("Επιλέχθηκε η εικόνα:", result.assets[0]);
+  console.log('URI εικόνας:', result.assets[0].uri);
+  setPhoto(result.assets[0]);  // Αποθήκευση εικόνας στο state
+} else {
+  console.log("Η επιλογή εικόνας ακυρώθηκε ή δεν υπάρχει αποτέλεσμα");
+}
+
+
+
+
+  if (!result.canceled && result.assets && result.assets[0]) {
+    console.log("Επιλέχθηκε η εικόνα:", result.assets[0]);
+    setPhoto(result.assets[0]);
+  } else {
+    console.log("Η επιλογή εικόνας ακυρώθηκε ή δεν υπάρχει αποτέλεσμα");
+  }
+};
 
   return (
     <StyledContainer>
       
         <PageTitle>Προφίλ</PageTitle>
-
+        
         <Formik
           initialValues={{
             jobType: '',
             ministry: '',
             companyType: '',
             specialization: '',
-            profilePicture: null,
+            profilePicture: {},
             job_name: '',
             experience: '',
             job_address: '',
             job_phone: '',
           }}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+          //validationSchema={validationSchema}
+          /*onSubmit={handleSubmit}*/
+          onSubmit={(values) => {
+    console.log('Form submitted. Form values:', values);  // Προσθήκη log για να δούμε αν καλείται το onSubmit
+    handleSubmit(values);  // Καλεί την handleSubmit, αν δεν εμφανίζεται το log εδώ το πρόβλημα είναι σε αυτήν
+  }}
+         
+
         >
           {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
             <>
@@ -235,19 +302,31 @@ axios
               <StyledButton onPress={pickImage}>
                 <ButtonText>Επιλέξτε Φωτογραφία Προφίλ</ButtonText>
               </StyledButton>
-              {photo && <ProfileImageImages source={{ uri: photo.uri }} />}
+              {photo && <Image source={{ uri: photo.uri }} style={{ width: 150, height: 150, borderRadius: 75 }} />}
+
               {errors.profilePicture && touched.profilePicture && <MsgBox>{errors.profilePicture}</MsgBox>}
 
               {/* Υποβολή */}
-              <StyledButton onPress={handleSubmit}>
+              <StyledButton onPress={() => {
+                  console.log('Υποβολή πατημένο');
+                  console.log('Εκτελείται το handleSubmit');
+                   handleSubmit();  // Εδώ καλείται η handleSubmit
+                    }}>
                 <ButtonText>Υποβολή</ButtonText>
               </StyledButton>
-            </>
+
+
+              
+             
+             
+              </>
           )}
         </Formik>
-      
+       
    </StyledContainer>
   );
-};
 
-export default ProfileScreen;
+}
+
+
+export default Profile;

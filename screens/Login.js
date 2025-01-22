@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
 
@@ -52,6 +53,19 @@ const Login = ({navigation}) => {
     const [message, setMessage] = useState(''); // Για μηνύματα επιτυχίας ή σφάλματος
 
 
+
+    //συνάρτηση για αποθήκευση του accessToken και του RefreshToken
+    const storeToken = async (key, value) => {
+        try {
+            await SecureStore.setItemAsync(key, value);
+        } catch (error) {
+            console.error("Error storing token:", error);
+        }
+    };
+
+
+
+
     //σύνδεση με api
     const handleLogin = async (credentials) => {
         try {
@@ -59,16 +73,27 @@ const Login = ({navigation}) => {
             const response = await axios.post('http://192.168.1.131:8000/api/login/', credentials);
             console.log('Response:', response);  // Log η πλήρης απόκριση για να δεις τι επιστρέφει το API
             if (response.status === 200) {
-                const { access, refresh } = response.data;
+                const {accessToken } = response.data;
 
-                // Αποθήκευση των tokens (π.χ., SecureStore ή AsyncStorage)
-                console.log('Access Token:', access);
-                console.log('Refresh Token:', refresh);
+
+                if (!accessToken) {
+                    throw new Error('Tokens are missing or undefined in the API response');
+                }
+
+
+                // Αποθήκευση των tokens καλώντας την συνάρτηση storeToken με χρήση->SecureStore
+                await storeToken('accessToken', accessToken);
+                //await storeToken('refreshToken', refresh);
+                
+                
+                console.log('Access Token:', accessToken);
+                //console.log('Refresh Token:', refresh);
 
                 // Μετάβαση στην οθόνη Welcome
                 navigation.navigate('Welcome');
             }
         } catch (error) {
+            console.error('Axios Error:', error); // Εκτύπωση πλήρους σφάλματος
             // Αν αποτύχει η σύνδεση
             if (error.response) {
                 console.log('Error response:', error.response);  // Έλεγξε την απόκριση σφάλματος
@@ -78,9 +103,6 @@ const Login = ({navigation}) => {
             }
         }
     };
-
-
-
 
    
     return (

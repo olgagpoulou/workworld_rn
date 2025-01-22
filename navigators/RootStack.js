@@ -35,12 +35,15 @@ const RootStack = () => {
                 }
                
                 }}
-                 initialRouteName="Profile"
+                 initialRouteName="Login"
             >
-                <Stack.Screen name="Profile" component={Profile}/>
+               
                 <Stack.Screen name="Login" component={Login}/>
                 <Stack.Screen name="Singup" component={Singup}/>
+                
                 <Stack.Screen name="Welcome" component={Welcome}/>
+                <Stack.Screen name="Profile" component={Profile}/>
+              
 
 
             </Stack.Navigator>
