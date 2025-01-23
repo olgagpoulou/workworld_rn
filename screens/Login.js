@@ -86,7 +86,7 @@ const Login = ({navigation}) => {
                 //await storeToken('refreshToken', refresh);
                 
                 
-                console.log('Access Token:', accessToken);
+                console.log('Access Token11:', accessToken);
                 //console.log('Refresh Token:', refresh);
 
                 // Μετάβαση στην οθόνη Welcome

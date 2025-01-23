@@ -95,10 +95,14 @@ const Profile = ({navigation}) => {
     formData.append('job_type', values.jobType);
 
     if (values.jobType === 'public') {
+      
       formData.append('ministry', values.ministry);
+      console.log('Adding ministry', values.ministry);
     } else if (values.jobType === 'private') {
+      console.log('Adding company_type');
       formData.append('company_type', values.companyType);
     } else if (values.jobType === 'freelancer') {
+      console.log('Adding specialization');
       formData.append('specialization', values.specialization);
     }
     formData.append('job_name', values.job_name);
@@ -135,14 +139,21 @@ const submitProfileData = async (formData) => {
     console.log('Ανακτήθηκε το access token:', accessToken);  // Log για το token
 
     if (accessToken) {
+      console.log('mpainei stto api'); 
+      console.log('Headers1:', {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data',
+      });   
+      console.log('formData:', formData); 
       // Στείλε τα δεδομένα στο API με το token στον header
       const response = await axios.post('http://192.168.1.131:8000/api/profile/create/', formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'multipart/form-data',
         },
+        
       });
-
+      console.log('Headers που στέλνονται στο API:', response.headers);
       console.log('Profile updated successfully:', response.data);
     } else {
       console.log('No access token found');
@@ -151,7 +162,6 @@ const submitProfileData = async (formData) => {
     console.error('Error submitting profile data:', error);
   }
 };
-
 
 
  // Συνάρτηση για να ανοίξουμε την κάμερα ή το gallery για να επιλέξει εικόνα ο χρήστης
@@ -227,6 +237,7 @@ if (!result.canceled && result.assets && result.assets[0] && result.assets[0].ur
             selectedValue={values.jobType}
             onValueChange={(itemValue) => setFieldValue('jobType', itemValue)}
             style={styled.pickerStyle}
+           
           >
            
             <Picker.Item label="Δημόσιος Υπάλληλος" value="public" />
