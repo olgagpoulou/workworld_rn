@@ -9,8 +9,11 @@ import * as ImagePicker from 'expo-image-picker'; // Για την επιλογ�
 //colors
 import { Colors } from './../components/styles';
 
+
 import {
     StyledContainer,
+    FormCard,
+    ProfileContainer,
     InnerConatiner,
     Background,
     PageTitle,
@@ -33,6 +36,9 @@ import {
     TextLink,
     TextLinkContent,
     ProfileImageImages,
+    PickerStyle,
+    PickerView
+   
   
     
    } from './../components/styles';
@@ -139,7 +145,7 @@ const submitProfileData = async (formData) => {
     console.log('Ανακτήθηκε το access token:', accessToken);  // Log για το token
 
     if (accessToken) {
-      console.log('mpainei stto api'); 
+      console.log('mpainei sto api'); 
       console.log('Headers1:', {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data',
@@ -205,9 +211,12 @@ if (!result.canceled && result.assets && result.assets[0] && result.assets[0].ur
 };
 
   return (
-    <StyledContainer>
+    
+      <StyledContainer>
+    
       
-        <PageTitle>Προφίλ</PageTitle>
+      
+        <PageTitle>Επαγγελματικό Προφίλ</PageTitle>
         
         <Formik
           initialValues={{
@@ -232,33 +241,55 @@ if (!result.canceled && result.assets && result.assets[0] && result.assets[0].ur
         >
           {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
             <>
+           
               {/* Τύπος Εργασίας - Picker */}
-          <Picker
+            <FormCard>
+            <ExtraView>
+              <ExtraText> Επιλογή Καθεστώτος Εργασίας</ExtraText>
+            </ExtraView>
+           
+            <PickerStyle 
             selectedValue={values.jobType}
             onValueChange={(itemValue) => setFieldValue('jobType', itemValue)}
-            style={styled.pickerStyle}
+            
            
           >
-           
             <Picker.Item label="Δημόσιος Υπάλληλος" value="public" />
             <Picker.Item label="Ιδιωτικός Υπάλληλος" value="private" />
             <Picker.Item label="Ελεύθερος Επαγγελματίας" value="freelancer" />
-          </Picker>
+            </PickerStyle>
+         
           {errors.jobType && touched.jobType && <Text style={styles.error}>{errors.jobType}</Text>}
+           
 
               {/* Επιλογές ανάλογα με τον Τύπο Εργασίας */}
+              
               {values.jobType === 'public' && (
+                <>
+             {/* Τίτλος πάνω από το Picker */}
+                <ExtraView>
+                  <ExtraText>Επιλογή Υπεύθυνου Υπουργείου</ExtraText>
+                </ExtraView>
+                
                 <Picker
                   selectedValue={values.ministry}
                   onValueChange={(itemValue) => setFieldValue('ministry', itemValue)}
+                  style={styled.pickerStyle}
                 >
                   <Picker.Item label="Υπουργείο Παιδείας" value="education" />
                   <Picker.Item label="Υπουργείο Υγείας" value="health" />
                   <Picker.Item label="Υπουργείο Οικονομικών" value="finance" />
                 </Picker>
+               </> 
               )}
-
+              
               {values.jobType === 'private' && (
+                <>
+             {/* Τίτλος πάνω από το Picker */}
+                <ExtraView>
+                  <ExtraText>Τομέας Εργασίας</ExtraText>
+                </ExtraView>
+
                 <Picker
                   selectedValue={values.companyType}
                   onValueChange={(itemValue) => setFieldValue('companyType', itemValue)}
@@ -267,9 +298,16 @@ if (!result.canceled && result.assets && result.assets[0] && result.assets[0].ur
                   <Picker.Item label="Χρηματοοικονομικά" value="finance" />
                   <Picker.Item label="Λιανικό Εμπόριο" value="retail" />
                 </Picker>
+                </>
               )}
 
               {values.jobType === 'freelancer' && (
+                <>
+             {/* Τίτλος πάνω από το Picker */}
+                <ExtraView>
+                  <ExtraText>Ειδικότητα</ExtraText>
+                </ExtraView>
+
                 <Picker
                   selectedValue={values.specialization}
                   onValueChange={(itemValue) => setFieldValue('specialization', itemValue)}
@@ -278,6 +316,7 @@ if (!result.canceled && result.assets && result.assets[0] && result.assets[0].ur
                   <Picker.Item label="Δικηγόρος" value="lawyer" />
                   <Picker.Item label="Μηχανικός" value="engineer" />
                 </Picker>
+                </>
               )}
               <StyledInputProfileText
                     label="Φορέας Εργασίας"
@@ -310,7 +349,7 @@ if (!result.canceled && result.assets && result.assets[0] && result.assets[0].ur
               
 
               {/* Επιλογή Εικόνας */}
-              <StyledButton onPress={pickImage}>
+              <StyledButton jobprofilebutton={true} onPress={pickImage}>
                 <ButtonText>Επιλέξτε Φωτογραφία Προφίλ</ButtonText>
               </StyledButton>
               {photo && <Image source={{ uri: photo.uri }} style={{ width: 150, height: 150, borderRadius: 75 }} />}
@@ -318,7 +357,7 @@ if (!result.canceled && result.assets && result.assets[0] && result.assets[0].ur
               {errors.profilePicture && touched.profilePicture && <MsgBox>{errors.profilePicture}</MsgBox>}
 
               {/* Υποβολή */}
-              <StyledButton onPress={() => {
+              <StyledButton jobprofilebutton={true}  onPress={() => {
                   console.log('Υποβολή πατημένο');
                   console.log('Εκτελείται το handleSubmit');
                    handleSubmit();  // Εδώ καλείται η handleSubmit
@@ -328,14 +367,16 @@ if (!result.canceled && result.assets && result.assets[0] && result.assets[0].ur
 
 
               
-             
+              </FormCard>
              
               </>
           )}
+       
         </Formik>
        
-   </StyledContainer>
-  );
+    </StyledContainer>
+   
+     );
 
 }
 

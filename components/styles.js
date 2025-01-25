@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import {View, Text, Image,TextInput, TouchableOpacity } from 'react-native';
 import Constants from 'expo-constants';
+import { Picker } from '@react-native-picker/picker';
 
 const StatusBarHeight = Constants.statusBarHeight;
 
@@ -12,18 +13,18 @@ export const Colors = {
     blue_cl: '#034078',
     dark_blue_cl:'#001F54',
     bb_blue_cl: '#1282A2',
-    red_cl: '#FA1E08',
     white_cl: '#FEFCFB',
     black_cl: '#0A1128',
     gray_cl: '#F2F2F2',
     yellow_cl: '#FBED35',
     dark_gray: '#ABABAB',
     bb_brown_cl: '#ECB797',
+    blue_gray: '#D9E5E8',
 
 
 };
 
-const { green_cl, pearpl_cl , blue_cl, red_cl, white_cl , black_cl , gray_cl , yellow_cl,bb_blue_cl,dark_blue_cl,bb_brown_cl } = Colors;
+const { green_cl, pearpl_cl ,blue_gray, blue_cl, red_cl, white_cl , black_cl , gray_cl , yellow_cl,bb_blue_cl,dark_blue_cl,bb_brown_cl } = Colors;
 
 export const StyledContainer = styled.View`
     flex: 1;
@@ -65,6 +66,22 @@ export const LoginContainer = styled.View`
   margin-top: 230px;
 `;
 
+export const ProfileContainer = styled.View`
+  width: 95%;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.8); /* Λευκό με διαφάνεια */
+  align-items: center;
+  margin-top: 30px;
+`;
+
+export const FormCard = styled.View`
+  background-color: ${blue_gray};
+  border-radius: 10px;
+  padding: 20px; 
+  
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+`;
 
 export const PageTitle = styled.Text`
     font-size: 30px;
@@ -130,13 +147,16 @@ export const ProfileImage = styled.Image`
     borderRadius: 75px;
     marginBottom: 10px;
 `;
-export const pickerStyle=styled.View`
-    height: 150;
+
+
+
+export const PickerStyle=styled(Picker)`
+    height: 70px;
     width: "80%";
     color: bb_blue_cl;
     textAlign: 'center';
-    border: 10px;
 
+    
 `;
 
 
@@ -166,6 +186,13 @@ export const StyledButton = styled.TouchableOpacity`
         justify-content: center;
     
     `}
+    ${(props) => props.jobprofilebutton == true && `
+        background-color: ${bb_brown_cl};
+        flex-direction: row;
+        justify-content: center;
+    
+    `}
+
 
 
 `;
