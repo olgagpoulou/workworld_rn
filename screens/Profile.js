@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react';
+import { ScrollView } from 'react-native'; // Import ScrollView
 import { View, Text, TextInput, Button, Image , StyleSheet,  Platform , Alert  } from 'react-native';
 import { Formik } from 'formik';
 import axios from 'axios';
@@ -44,7 +45,8 @@ import {
    } from './../components/styles';
 import styled from 'styled-components';
 
-  // import styles from './../components/styles';  
+ 
+
 
 const Profile = ({navigation}) => {
 
@@ -71,12 +73,12 @@ const Profile = ({navigation}) => {
       jobType === 'freelancer' ? schema.required('Απαιτείται ειδικότητα') : schema.nullable()
     ),
   
+    
     profilePicture: Yup.mixed() //εχω προβλημα εδω
     .required('Απαιτείται φωτογραφία προφίλ')
     .test('fileExists', 'Πρέπει να επιλέξετε μια εικόνα',
        (value) => { return  value && value.uri !== 'file://' && value.uri !== '';}),
 
-  
     job_name: Yup.string().required('Απαιτείται Φορέας Εργασίας'),
   
     experience: Yup.string().required('Απαιτείται Τομέας Ειδίκευσης'),
@@ -97,7 +99,7 @@ const Profile = ({navigation}) => {
     console.log('handleSubmit εκτελέστηκε');
     console.log('Τιμές από τη φόρμα:', values);
 
-    const formData = new FormData();
+   const formData = new FormData();
     formData.append('job_type', values.jobType);
 
     if (values.jobType === 'public') {
@@ -116,8 +118,9 @@ const Profile = ({navigation}) => {
     formData.append('job_address', values.job_address);
     formData.append('job_phone', values.job_phone);
 
-  // Προσθήκη της εικόνας αν υπάρχει
-  if (photo && photo.uri) {
+  
+    // Προσθήκη της εικόνας αν υπάρχει
+     if (photo && photo.uri) {
     formData.append('profile_picture', {
       uri: photo.uri,
       name: photo.fileName || 'default_image.jpg', // Εάν το fileName δεν υπάρχει, χρησιμοποίησε κάποιο default
@@ -126,6 +129,14 @@ const Profile = ({navigation}) => {
   } else {
     console.log("Δεν επιλέχθηκε εικόνα ή δεν είναι έγκυρη.");
   }    
+
+
+     // Debugging: Log το περιεχόμενο του formData
+  console.log('111111111111111formData περιεχόμενο:');
+  for (let pair of formData.entries()) {
+    console.log(`${pair[0]}:`, pair[1]);
+  }
+
       
     // Καλούμε την συνάρτηση  που στέλνει τα δεδομένα στο API ώστε πατώντας το button=Υποβολή να διαβαζει τα data απο την φόρμα, να τα αποθηκευσει και να καλει την συναρτηση για αποστολη
     console.log('Αποστολή δεδομένων στο API:', formData);
@@ -138,24 +149,24 @@ const Profile = ({navigation}) => {
 
 // Αποστολή δεδομένων στο API
 const submitProfileData = async (formData) => {
+  console.log('αααααααααformData προς αποστολή:');
+for (let pair of formData.entries()) {
+  console.log(`${pair[0]}:`, pair[1]);
+}
   console.log("Δεδομένα που στέλνονται στο API:", formData);  // Προσθήκη για debugging
   try {
     // Ανάκτηση του access token από το SecureStore
     const accessToken = await SecureStore.getItemAsync('accessToken');
     console.log('Ανακτήθηκε το access token:', accessToken);  // Log για το token
 
-    if (accessToken) {
-      console.log('mpainei sto api'); 
-      console.log('Headers1:', {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'multipart/form-data',
-      });   
+    if (accessToken) { 
       console.log('formData:', formData); 
       // Στείλε τα δεδομένα στο API με το token στον header
       const response = await axios.post('http://192.168.1.131:8000/api/profile/create/', formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'multipart/form-data',
+          
         },
         
       });
@@ -181,12 +192,15 @@ const submitProfileData = async (formData) => {
   }
 
   //απο εδω
-  let result = await ImagePicker.launchImageLibraryAsync({
+  const result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.Images,  
     allowsEditing: true, // Επιτρέπει την επεξεργασία
     aspect: [4, 3], // Αναλογία εικόνας (προαιρετικό)
     quality: 1, // Ποιότητα εικόνας
   });
+
+ 
+
   
   console.log("Αποτέλεσμα από την βιβλιοθήκη εικόνας:", result);
 
@@ -195,25 +209,16 @@ if (!result.canceled && result.assets && result.assets[0] && result.assets[0].ur
   console.log("Επιλέχθηκε η εικόνα:", result.assets[0]);
   console.log('URI εικόνας:', result.assets[0].uri);
   setPhoto(result.assets[0]);  // Αποθήκευση εικόνας στο state
+  console.log("LLLLLLLLLLLLLΗ εικόνα αποθηκεύτηκε στο state:", result.assets[0]);
 } else {
   console.log("Η επιλογή εικόνας ακυρώθηκε ή δεν υπάρχει αποτέλεσμα");
 }
-
-
-
-
-  if (!result.canceled && result.assets && result.assets[0]) {
-    console.log("Επιλέχθηκε η εικόνα:", result.assets[0]);
-    setPhoto(result.assets[0]);
-  } else {
-    console.log("Η επιλογή εικόνας ακυρώθηκε ή δεν υπάρχει αποτέλεσμα");
-  }
 };
 
   return (
     
       <StyledContainer>
-    
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}>
       
       
         <PageTitle>Επαγγελματικό Προφίλ</PageTitle>
@@ -233,11 +238,9 @@ if (!result.canceled && result.assets && result.assets[0] && result.assets[0].ur
           //validationSchema={validationSchema}
           /*onSubmit={handleSubmit}*/
           onSubmit={(values) => {
-    console.log('Form submitted. Form values:', values);  // Προσθήκη log για να δούμε αν καλείται το onSubmit
-    handleSubmit(values);  // Καλεί την handleSubmit, αν δεν εμφανίζεται το log εδώ το πρόβλημα είναι σε αυτήν
-  }}
-         
-
+          console.log('Form submitted. Form values:', values);  // Προσθήκη log για να δούμε αν καλείται το onSubmit
+          handleSubmit(values);  // Καλεί την handleSubmit, αν δεν εμφανίζεται το log εδώ το πρόβλημα είναι σε αυτήν
+          }}
         >
           {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
             <>
@@ -373,7 +376,7 @@ if (!result.canceled && result.assets && result.assets[0] && result.assets[0].ur
           )}
        
         </Formik>
-       
+      </ScrollView>
     </StyledContainer>
    
      );

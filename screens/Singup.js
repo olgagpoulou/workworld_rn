@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import { Alert } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
+import * as SecureStore from 'expo-secure-store';
+
 
 //formik;
 import { Formik } from 'formik';
@@ -14,6 +16,9 @@ import {Octicons,Ionicons,Fontisto} from '@expo/vector-icons';
 
 //DatetimePicker
 import DateTimePicker from '@react-native-community/datetimepicker';
+
+//storeToken
+//import storeToken from './../screens/Login';
 
 
 
@@ -49,6 +54,14 @@ import {
 
 import { View, TouchableOpacity } from 'react-native';
 
+//συνάρτηση για αποθήκευση του accessToken και του RefreshToken
+    const storeToken2 = async (key, value) => {
+        try {
+            await SecureStore.setItemAsync(key, value);
+        } catch (error) {
+            console.error("Error storing token:", error);
+        }
+    };
 
 
 
@@ -91,7 +104,17 @@ const Singup = ({navigation}) => {
             // Αν η εγγραφή πετύχει
             console.log('User registered successfully', response.data);
             Alert.alert('Success', 'Account created successfully!');
-            navigation.navigate("Welcome");
+
+            //Δημιουργία και αποθηκευση token
+            const {accessToken } = response.data;
+            if (accessToken) {
+                console.log('Token received after signup:', accessToken);
+               
+               
+                await storeToken2('accessToken', accessToken);
+                navigation.navigate("Welcome");
+
+            }
         } catch (error) {
             console.error('Error during signup:', error.response ? error.response.data : error.message);
             Alert.alert('Error', 'An error occurred during registration');
