@@ -71,7 +71,7 @@ const Login = ({navigation}) => {
         try {
             // Σύνδεση με το API
             const response = await axios.post('http://192.168.1.131:8000/api/login/', credentials);
-            console.log('Response:', response);  // Log η πλήρης απόκριση για να δεις τι επιστρέφει το API
+            console.log('Responseγγγγγ:', response);  // Log η πλήρης απόκριση για να δεις τι επιστρέφει το API
             if (response.status === 200) {
                 const {accessToken } = response.data;
 
@@ -90,7 +90,7 @@ const Login = ({navigation}) => {
                 //console.log('Refresh Token:', refresh);
 
                 // Μετάβαση στην οθόνη Welcome
-                navigation.navigate('Welcome');
+                navigation.navigate('Index');
             }
         } catch (error) {
             console.error('Axios Error:', error); // Εκτύπωση πλήρους σφάλματος

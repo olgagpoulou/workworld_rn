@@ -16,6 +16,8 @@ import Login from './../screens/Login';
 import Singup from './../screens/Singup';
 import Welcome from './../screens/Welcome';
 import Profile from './../screens/Profile';
+import Index from './../screens/Index';
+import EditProfile from './../screens/EditProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,9 +42,13 @@ const RootStack = () => {
                
                 <Stack.Screen name="Login" component={Login}/>
                 <Stack.Screen name="Singup" component={Singup}/>
-                
                 <Stack.Screen name="Welcome" component={Welcome}/>
                 <Stack.Screen name="Profile" component={Profile}/>
+                <Stack.Screen name="Index" component={Index}/>
+                <Stack.Screen name="EditProfile"
+                              component={EditProfile}
+                              initialParams={{ profileId: 'someId' }}  // Περνάς τα params
+                />
               
 
 

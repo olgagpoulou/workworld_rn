@@ -245,3 +245,84 @@ export const TextLinkContent =styled.Text`
     font-size: 15px;
 `;
 
+//-----------------------Index style-----------------------
+
+export const IndexContainer =styled.View`
+    flex: 1;
+    width: '100%';
+    align-items: center;   
+    padding-top: ${StatusBarHeight +30}px;
+    
+    `;
+
+    export const IndexTopContainer =styled.View`
+   /* flex: 0.3;  /* 30% της οθόνης */
+    align-items: center;  
+    background-color: ${white_cl}; 
+    marginBottom: 5px;
+    width: '100%'
+  
+    `;
+    export const IndexOuterBoxContainer =styled.View`
+    width: '100%';
+    height: '100%';
+    align-items: center;  
+    background-color: ${bb_brown_cl}; 
+    margin-bottom: 5px;
+    border-color: ${black_cl};
+    border-radius: 10px;
+    paddind: 2px;
+    justify-content: center;
+   
+     
+    `;
+    export const IndexInnerBoxContainer =styled.View`
+    
+    width: '100%';
+    height: '100%';
+    align-items: center;  
+    background-color: ${bb_blue_cl}; 
+    margin-bottom: 0px;
+    border-color: ${black_cl};
+    border-radius: 10px;
+    justify-content: center;
+    `;
+
+    export const IndexBottomContainer = styled.View`
+    flex: 0.7;  /* 70% της οθόνης */
+    width: 100%;
+    align-items: center;  
+    background-color: ${bb_blue_cl}; 
+`;
+    export const BoxView = styled.View`
+    font-size: 16px;
+    font-weight: bold;
+    width: 380px;
+    justify-content: center;
+    align-items: center;
+    margin: 2px;
+   
+    `;
+    export const BoxText = styled.Text`
+    font-size: 16px;
+    font-weight: bold;
+    width: 380px;
+    text-align: ${(props) => props.align || "left"}
+    `;
+
+    export const Avatar = styled.Image`
+    width: 180px;
+    height:180px;
+    border-radius:100px;
+    align-self: center; 
+    `;
+
+    export const EditButton = styled.TouchableOpacity`
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: white;
+    padding: 5px;
+    border-radius: 15px;
+    elevation: 5;
+  `;
