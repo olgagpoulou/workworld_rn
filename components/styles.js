@@ -20,11 +20,12 @@ export const Colors = {
     dark_gray: '#ABABAB',
     bb_brown_cl: '#ECB797',
     blue_gray: '#D9E5E8',
+    sbcolor: '#EEEEEE',
 
 
 };
 
-const { green_cl, pearpl_cl ,blue_gray, blue_cl, red_cl, white_cl , black_cl , gray_cl , yellow_cl,bb_blue_cl,dark_blue_cl,bb_brown_cl } = Colors;
+const { green_cl, pearpl_cl ,blue_gray, blue_cl, red_cl, white_cl , black_cl , gray_cl , yellow_cl,bb_blue_cl,dark_blue_cl,bb_brown_cl ,sbcolor} = Colors;
 
 export const StyledContainer = styled.View`
     flex: 1;
@@ -307,15 +308,18 @@ export const IndexContainer =styled.View`
     font-size: 16px;
     font-weight: bold;
     width: 380px;
-    text-align: ${(props) => props.align || "left"}
+    text-align: ${(props) => props.align || "left"};
+    font-size: ${(props) => props.fontSize || 16}px;
     `;
 
     export const Avatar = styled.Image`
-    width: 180px;
-    height:180px;
-    border-radius:100px;
-    align-self: center; 
-    `;
+    width: ${(props) => props.size || 180}px;
+    height:${(props) => props.size || 180}px;
+    border-radius: ${(props) => (props.size ? props.size / 2 : 90)}px; 
+    align-self: ${(props) => props.align || 'center'};  
+    margin-left: ${(props) => (props.align === 'left' ? '10px' : '0')};  
+    margin-right: ${(props) => (props.align === 'center' ? '0' : '10px')};  
+        `;
 
     export const EditButton = styled.TouchableOpacity`
     position: absolute;
@@ -326,3 +330,30 @@ export const IndexContainer =styled.View`
     border-radius: 15px;
     elevation: 5;
   `;
+  export const SmallButton = styled.TouchableOpacity`
+    width: 42px;
+    height: 42px;
+    border-radius: 21px;
+    background: ${sbcolor} ;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    align: right;
+  `;
+  export const Row = styled.View`
+   flex-direction : row;
+   width: 100%;
+   margin-top:10px;
+   margin-left:20px;
+  `;
+  export const AppContainer = styled.View`
+    width: 85%;
+    height:58px;
+    padding: 0 11px;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-end;
+    
+    
+    
+    `;

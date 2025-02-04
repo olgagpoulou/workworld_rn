@@ -112,7 +112,7 @@ const fetchProfileData = async () => {
     }
   };  
 
-   //hundleupdateprofile εμφανιζω οτι υπαρχει στο προφιλ
+   //hundleupdateprofile κανω update τις αλλαγες
    const handleUpdateProfile = async (values) => 
   {
     console.log("Submitting updated profile:", values);  
@@ -120,7 +120,7 @@ const fetchProfileData = async () => {
     try {
       const accessToken = await SecureStore.getItemAsync('accessToken');
       console.log("TOKEN:", accessToken);
-      const response = await axios.put('http://192.168.1.131:8000/api/profile/', values, {
+      const response = await axios.patch('http://192.168.1.131:8000/api/profile/', values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',

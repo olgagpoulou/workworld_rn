@@ -102,8 +102,8 @@ const Welcome = ({navigation}) => {
                                         <Line />
                                         
                                         <ExtraView>
-                                            <ExtraText>Don't have an account already? </ExtraText>
-                                            <TextLink onPress={() =>  navigation.navigate("Singup")}>
+                                            <ExtraText>"Don't miss out! Complete your profile now." </ExtraText>
+                                            <TextLink onPress={() =>  navigation.navigate("Profile")}>
                                                 <TextLinkContent> Sign Up</TextLinkContent>
                                             </TextLink>
                                         </ExtraView>

@@ -86,11 +86,11 @@ const Login = ({navigation}) => {
                 //await storeToken('refreshToken', refresh);
                 
                 
-                console.log('Access Token11:', accessToken);
+                //console.log('Access Token11:', accessToken);
                 //console.log('Refresh Token:', refresh);
 
                 // Μετάβαση στην οθόνη Welcome
-                navigation.navigate('Index');
+                navigation.navigate('Home');
             }
         } catch (error) {
             console.error('Axios Error:', error); // Εκτύπωση πλήρους σφάλματος

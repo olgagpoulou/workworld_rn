@@ -14,10 +14,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'; // 
 //screens
 import Login from './../screens/Login';
 import Singup from './../screens/Singup';
+import Home from './../screens/Home';
 import Welcome from './../screens/Welcome';
 import Profile from './../screens/Profile';
 import Index from './../screens/Index';
 import EditProfile from './../screens/EditProfile';
+
+// Import του Bottom Tab Navigator
+import BottomTabNavigator from './../navigators/BottomTabNavigator';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -39,16 +44,19 @@ const RootStack = () => {
                 }}
                  initialRouteName="Login"
             >
-               
+                {/* Οθόνες που δεν εχουν bottom Tab Navigator */}
                 <Stack.Screen name="Login" component={Login}/>
                 <Stack.Screen name="Singup" component={Singup}/>
                 <Stack.Screen name="Welcome" component={Welcome}/>
                 <Stack.Screen name="Profile" component={Profile}/>
-                <Stack.Screen name="Index" component={Index}/>
                 <Stack.Screen name="EditProfile"
                               component={EditProfile}
                               initialParams={{ profileId: 'someId' }}  // Περνάς τα params
                 />
+
+                {/* Η main τωρα θα εχει το bottom Tab Navigator και θα εοεξεργαζεται τις υπολοιπες οθονες*/}
+                <Stack.Screen name="Home" component={BottomTabNavigator} />
+                
               
 
 
