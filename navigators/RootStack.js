@@ -20,6 +20,8 @@ import Profile from './../screens/Profile';
 import Index from './../screens/Index';
 import EditProfile from './../screens/EditProfile';
 
+
+
 // Import του Bottom Tab Navigator
 import BottomTabNavigator from './../navigators/BottomTabNavigator';
 
@@ -49,10 +51,14 @@ const RootStack = () => {
                 <Stack.Screen name="Singup" component={Singup}/>
                 <Stack.Screen name="Welcome" component={Welcome}/>
                 <Stack.Screen name="Profile" component={Profile}/>
+               
+                
+               
                 <Stack.Screen name="EditProfile"
                               component={EditProfile}
                               initialParams={{ profileId: 'someId' }}  // Περνάς τα params
                 />
+                
 
                 {/* Η main τωρα θα εχει το bottom Tab Navigator και θα εοεξεργαζεται τις υπολοιπες οθονες*/}
                 <Stack.Screen name="Home" component={BottomTabNavigator} />

@@ -48,6 +48,13 @@ export const Background = styled.ImageBackground`
   align-items: center;
   
  `;
+ export const ImageBackground = styled.ImageBackground`
+    flex: 1;
+    width: 100%;
+  justify-content: center;
+
+  
+ `;
 
  export const Overlay = styled.View`
  position: absolute;
@@ -248,6 +255,15 @@ export const TextLinkContent =styled.Text`
 
 //-----------------------Index style-----------------------
 
+export const Divider = styled.View`
+  height: 1px;
+  background-color: ${bb_blue_cl};
+  margin-vertical: 5px;
+  
+`;
+
+
+
 export const IndexContainer =styled.View`
     flex: 1;
     width: '100%';
@@ -268,7 +284,7 @@ export const IndexContainer =styled.View`
     width: '100%';
     height: '100%';
     align-items: center;  
-    background-color: ${bb_brown_cl}; 
+    background-color: ${bb_blue_cl}; 
     margin-bottom: 5px;
     border-color: ${black_cl};
     border-radius: 10px;
@@ -282,7 +298,7 @@ export const IndexContainer =styled.View`
     width: '100%';
     height: '100%';
     align-items: center;  
-    background-color: ${bb_blue_cl}; 
+    background-color: white; 
     margin-bottom: 0px;
     border-color: ${black_cl};
     border-radius: 10px;
@@ -293,7 +309,15 @@ export const IndexContainer =styled.View`
     flex: 0.7;  /* 70% της οθόνης */
     width: 100%;
     align-items: center;  
-    background-color: ${bb_blue_cl}; 
+    background-color: white; 
+
+`;
+    export const IndexBottomContainer1 = styled.View`
+    flex: 1; /* 70% της οθόνης */
+    width: 100%;
+    align-items: justify;  
+     
+
 `;
     export const BoxView = styled.View`
     font-size: 16px;
@@ -342,14 +366,14 @@ export const IndexContainer =styled.View`
   `;
   export const Row = styled.View`
    flex-direction : row;
-   width: 100%;
+   width: 90%;
    margin-top:10px;
    margin-left:20px;
   `;
   export const AppContainer = styled.View`
-    width: 85%;
+    width: 40%;
     height:58px;
-    padding: 0 11px;
+    padding: 0 35px;
     align-items: center;
     flex-direction: row;
     justify-content: flex-end;
@@ -357,3 +381,76 @@ export const IndexContainer =styled.View`
     
     
     `;
+    //----------card style sto index----------------
+    export const Cardcontainer=styled.View`
+    
+    padding: 20px;
+    
+    width: 380px;
+    
+   `;
+   export const Header = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+`;
+
+export const Card = styled.View`
+  background-color: ${blue_gray} ;
+  margin-top:15px;
+  padding: 20px;
+  border-radius: 15px;
+  elevation: 8;
+  width: 100%;
+`;
+
+export const Name = styled.Text`
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+`;
+
+export const Email = styled.Text`
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 10px;
+  align-items: justify;
+`;
+
+export const Info = styled.Text`
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 5px;
+`;
+
+export const SkillsTitle = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #444;
+`;
+
+export const SkillsContainer = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 5px;
+`;
+
+export const Skill = styled.Text`
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  font-size: 14px;
+`;
+
+export const SmallRow=styled.View`
+  flex-direction : row;
+  margin: 5px;
+
+`;
+

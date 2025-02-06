@@ -9,6 +9,7 @@ import Home from './../screens/Home';
 import Index from './../screens/Index';
 import Logout from './../screens/Logout';
 
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +24,8 @@ const BottomTabNavigator = () => {
             let iconName;
             if (route.name === 'Home') {
               iconName = 'home-outline';
-            } else if (route.name === 'Index') {
+            }
+             else if (route.name === 'Index') {
               iconName = 'person-outline';
             } else if (route.name === 'Logout') {
               return<AntDesign name="logout" size={size} color={color}  />
@@ -38,6 +40,7 @@ const BottomTabNavigator = () => {
         <Tab.Screen name="Index" component={Index} />
         <Tab.Screen name="Logout" component={Logout} />
       </Tab.Navigator>
+      
     );
   };
   

@@ -2,6 +2,7 @@ import React from 'react';
 import * as SecureStore from 'expo-secure-store'; // Εισαγωγή της βιβλιοθήκης SecureStore
 import { useNavigation } from '@react-navigation/native';
 import { Button, View } from 'react-native';
+import  {useEffect,useState} from 'react';
 
 
 import { StatusBar } from 'expo-status-bar';
@@ -37,13 +38,16 @@ import {
    
   
 
-
+   
 
 const Logout = () => {
   const navigation = useNavigation();
+  const [location, setLocation] = useState(null);
 
   const handleLogout = async () => {
+    
     try {
+        setLocation(null); // Διαγράφει το location κατά το logout
       // Διαγραφή του token από το Secure Storage
       await SecureStore.deleteItemAsync('token'); // Διαγράφει το token από το Secure Storage
 
