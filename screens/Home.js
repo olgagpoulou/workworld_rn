@@ -139,7 +139,7 @@ const Home = () => {
                  color='black'
              />
            </SmallButton>
-           <SmallButton>
+           <SmallButton onPress={() => navigation.navigate("ConversationList")}>
              <MaterialCommunityIcons
                  name='facebook-messenger'
                  size={29}

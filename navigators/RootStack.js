@@ -19,11 +19,15 @@ import Welcome from './../screens/Welcome';
 import Profile from './../screens/Profile';
 import Index from './../screens/Index';
 import EditProfile from './../screens/EditProfile';
+import ConversationList from './../screens/ConversationList';
+import ConversationDetail from './../screens/ConversationDetail';
+import Messages from './../screens/Messages';
 
 
 
 // Import του Bottom Tab Navigator
 import BottomTabNavigator from './../navigators/BottomTabNavigator';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -51,8 +55,9 @@ const RootStack = () => {
                 <Stack.Screen name="Singup" component={Singup}/>
                 <Stack.Screen name="Welcome" component={Welcome}/>
                 <Stack.Screen name="Profile" component={Profile}/>
-               
-                
+                <Stack.Screen name="ConversationList" component={ConversationList}/>
+                <Stack.Screen name="ConversationDetail" component={ConversationDetail}/>
+                <Stack.Screen name="Messages" component={Messages}/>
                
                 <Stack.Screen name="EditProfile"
                               component={EditProfile}
