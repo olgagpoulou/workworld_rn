@@ -4,6 +4,10 @@ import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { getUserData, getProfileById } from './../components/api';
 import MessageItem from './../components/MessageItem';
+import { WebView } from 'react-native-webview';
+import { Ionicons, Feather, MaterialCommunityIcons  } from '@expo/vector-icons';
+import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
+
 
 
 import {
@@ -14,6 +18,10 @@ import {
     BackgroundImage,
     BoxText,
     Avatar,
+    SmallButton,
+    Row,
+    SmallRow,
+    RightIcon
     
     }
     
@@ -26,7 +34,20 @@ const ConversationDetail = ({ route, navigation }) => {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [isLoading, setIsLoading] = useState(false); // Προσθήκη loading state
   
+  //Συναρτήσεις για κλήση και βιντεοκλήση
   
+  
+    // Συνάρτηση για την απλή κλήση (μόνο ήχος)
+    const startCall = () => {
+      const roomName = `Call_${Date.now()}`; // Δημιουργούμε ένα μοναδικό όνομα δωματίου
+      navigation.navigate('JitsiCall', { roomName, isVideoCall: false });
+    };
+  
+    // Συνάρτηση για τη βιντεοκλήση
+    const startVideoCall = () => {
+      const roomName = `VideoCall_${Date.now()}`; // Δημιουργούμε ένα μοναδικό όνομα δωματίου
+      navigation.navigate('JitsiCall', { roomName, isVideoCall: true });
+    };
  
 
   useEffect(() => {
@@ -104,16 +125,20 @@ const ConversationDetail = ({ route, navigation }) => {
 
   return (
     <KeyboardAvoidingView style={{ flex: 1, padding: 10 }} behavior={Platform.OS === 'ios' ? 'padding' : null}>
-       <IndexContainer >
-         
-        <IndexTopContainer backgroundColor={'red'} borderWidth={4} >
+       <IndexContainer>
         
-        <BoxText>gjygkhlo;klgjkfjukhlk</BoxText>
-       
-      
-       
+        <IndexTopContainer  width={'100%'} alignItem={'right'}>
+       <SmallRow>
+        <SmallButton onPress={startCall}>
+        <SimpleLineIcons name="phone" size={29} color="black" />
+           </SmallButton>
+           <SmallButton onPress={startVideoCall}>
+           <Feather name="video" size={29} color="black" />
+           </SmallButton>
+           </SmallRow>
         </IndexTopContainer> 
-        <IndexBottomContainer1>
+        
+        <IndexBottomContainer1 >
           <BackgroundImage
                source={require('./../assets/images/pattern6.jpg')} // Αντικαταστήστε με τη διαδρομή της εικόνας σας
               resizeMode="repeat" // Επαναλαμβάνει την εικόνα για να καλύψει όλο το φόντο

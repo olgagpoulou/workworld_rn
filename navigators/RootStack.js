@@ -23,6 +23,7 @@ import ConversationList from './../screens/ConversationList';
 import ConversationDetail from './../screens/ConversationDetail';
 import Messages from './../screens/Messages';
 import SplashScreenComponent from './../screens/SplashScreenComponent';
+import JitsiCallScreen from './../screens/JitsiCallScreen';
 
 
 
@@ -59,6 +60,7 @@ const RootStack = () => {
                 <Stack.Screen name="Profile" component={Profile}/>
                 <Stack.Screen name="ConversationList" component={ConversationList}/>
                 <Stack.Screen name="ConversationDetail" component={ConversationDetail}/>
+                <Stack.Screen name="JitsiCall" component={JitsiCallScreen} />
                 <Stack.Screen name="Messages" component={Messages}/>
                 
                 <Stack.Screen name="EditProfile"
