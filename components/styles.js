@@ -454,3 +454,8 @@ export const SmallRow=styled.View`
 
 `;
 
+export const BackgroundImage = styled(ImageBackground)`
+  flex: 1;
+  
+`;
+

@@ -1,100 +1,151 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, Button, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, FlatList, TextInput, Button, KeyboardAvoidingView, Platform, ImageBackground } from 'react-native';
 import axios from 'axios';
-import SecureStore from 'expo-secure-store';
+import * as SecureStore from 'expo-secure-store';
+import { getUserData, getProfileById } from './../components/api';
+import MessageItem from './../components/MessageItem';
+
+
+import {
+  
+    IndexContainer,
+    IndexTopContainer,
+    IndexBottomContainer1,
+    BackgroundImage,
+    BoxText,
+    Avatar,
+    
+    }
+    
+    from  '../components/styles';
 
 const ConversationDetail = ({ route, navigation }) => {
   const { conversationId } = route.params || {}; // Παίρνουμε το conversationId από τα params της πλοήγησης
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-
-    // Ελέγξτε την τιμή του conversationId
-    console.log('conversationId:', conversationId);
-
-  if (!conversationId) {
-    return <Text marginTop={50}>Δεν υπάρχει id συνομιλίας</Text>; // Αν δεν υπάρχει, εμφάνιση μηνύματος ή χειρισμός του σφάλματος
-  }
-
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Προσθήκη loading state
+  
+  
+ 
 
   useEffect(() => {
+    if (!conversationId || isLoading) return;
+
+    const fetchCurrentUserId = async () => {
+        if (currentUserId) return; // Αν το userId έχει ήδη φορτωθεί, δεν το καλούμε ξανά
+      const userData = await getUserData();
+      if (userData && userData.id) {
+        setCurrentUserId(userData.id);
+      } else {
+        console.log('Unable to fetch user data or user ID is missing.');
+      }
+    };
+
     const fetchMessages = async () => {
+     // if (isLoading) return; // Έλεγχος για να μην ξεκινήσει το αίτημα αν είναι ήδη σε φόρτωση
+      setIsLoading(true); // Θέτουμε το isLoading σε true για να αποτρέψουμε νέα αιτήματα
+
       const accessToken = await SecureStore.getItemAsync('accessToken');
-      
       if (accessToken) {
         try {
-          const response = await axios.get(`http://192.168.1.131:8000/api/conversations/${conversationId}/messages/`, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-          setMessages(response.data); // Αποθηκεύουμε τα μηνύματα στο state
+          const response = await axios.get(
+            `http://192.168.1.131:8000/api/conversations/${conversationId}/messages/`,
+            { headers: { Authorization: `Bearer ${accessToken}` } }
+          );
+          const messagesWithSender = response.data.map(message => ({
+            ...message,
+            isCurrentUser: message.sender === currentUserId, // Συγκρίνουμε το sender με το currentUserId
+          }));
+          setMessages(messagesWithSender); // Ενημερώνουμε τα μηνύματα
         } catch (error) {
           console.error('Error fetching messages:', error);
+        } finally {
+          setIsLoading(false); // Θέτουμε το isLoading σε false όταν ολοκληρωθεί το αίτημα
         }
       } else {
         console.log('No access token');
       }
     };
 
-    fetchMessages(); // Καλούμε τη συνάρτηση για να πάρουμε τα μηνύματα
-  }, [conversationId]); // Καλείται ξανά αν αλλάξει το conversationId
+    fetchCurrentUserId(); // Φορτώνουμε το userId
+    fetchMessages(); // Φορτώνουμε τα μηνύματα
 
-  const renderItem = ({ item }) => (
-    <View style={{ padding: 10, borderBottomWidth: 1 }}>
-      <Text><strong>{item.sender.name}</strong></Text>
-      <Text>{item.content}</Text>
-    </View>
-  );
+  }, [conversationId, isLoading]); // Καλείται ξανά όταν αλλάζει το conversationId ή isLoading
 
   const handleSendMessage = async () => {
-    const accessToken = await SecureStore.getItemAsync('accessToken');
+    if (!currentUserId) {
+      console.log('Current user ID not fetched yet');
+      return;
+    }
 
-    if (accessToken && newMessage.trim()) {
-      try {
-        const response = await axios.post(`http://192.168.1.131:8000/api/conversations/${conversationId}/messages/`, 
-          { content: newMessage },
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-        
-        // Προσθήκη του νέου μηνύματος στην αρχή της λίστας
-        setMessages([response.data, ...messages]);
-        setNewMessage(''); // Καθαρισμός του input πεδίου
-      } catch (error) {
-        console.error('Error sending message:', error);
+    try {
+      const accessToken = await SecureStore.getItemAsync('accessToken');
+      if (accessToken && newMessage.trim()) {
+        const data = { content: newMessage };
+        const response = await axios.post(
+          `http://192.168.1.131:8000/api/conversations/${conversationId}/messages/`,
+          data,
+          { headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' } }
+        );
+
+       
+        // Προσθήκη του νέου μηνύματος στα μηνύματα
+        setMessages(prevMessages => [
+          ...prevMessages, 
+          { ...response.data, isCurrentUser: response.data.sender === currentUserId }
+        ]);
+        setNewMessage(''); // Άδειασμα του πεδίου
       }
-    } else {
-      console.log('Message is empty or no access token');
+    } catch (error) {
+      console.error('Error sending message:', error);
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1, padding: 10 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-    >
+    <KeyboardAvoidingView style={{ flex: 1, padding: 10 }} behavior={Platform.OS === 'ios' ? 'padding' : null}>
+       <IndexContainer >
+         
+        <IndexTopContainer backgroundColor={'red'} borderWidth={4} >
+        
+        <BoxText>gjygkhlo;klgjkfjukhlk</BoxText>
+       
+      
+       
+        </IndexTopContainer> 
+        <IndexBottomContainer1>
+          <BackgroundImage
+               source={require('./../assets/images/pattern6.jpg')} // Αντικαταστήστε με τη διαδρομή της εικόνας σας
+              resizeMode="repeat" // Επαναλαμβάνει την εικόνα για να καλύψει όλο το φόντο
+             
+            >
+      
+      
+      
       <FlatList
         data={messages}
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
-        inverted // Τοποθετούμε τα πιο πρόσφατα μηνύματα από κάτω
+        renderItem={({ item }) => <MessageItem item={item} currentUserId={currentUserId} />}
+        keyExtractor={item => (item.id ? item.id.toString() : item.message_id.toString())} // Έλεγχος για την ύπαρξη id
       />
-      
+
+      </BackgroundImage>
+      </IndexBottomContainer1>
+      </IndexContainer>
       <TextInput
         value={newMessage}
         onChangeText={setNewMessage}
         placeholder="Γράψτε το μήνυμά σας..."
         style={{
-          height: 40, 
+          height: 60, 
           borderColor: 'gray', 
           borderWidth: 1, 
           marginBottom: 10, 
           paddingHorizontal: 10
         }}
       />
+      
       <Button title="Αποστολή" onPress={handleSendMessage} />
+      
     </KeyboardAvoidingView>
   );
 };

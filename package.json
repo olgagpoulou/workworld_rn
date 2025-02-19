@@ -21,10 +21,13 @@
     "expo": "~52.0.23",
     "expo-constants": "~17.0.3",
     "expo-image-picker": "~16.0.4",
+    "expo-location": "~18.0.5",
     "expo-secure-store": "~14.0.1",
+    "expo-splash-screen": "~0.29.22",
     "expo-status-bar": "~2.0.0",
     "formik": "^2.4.6",
     "formit": "^0.0.2",
+    "qs": "^6.14.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.5",
@@ -36,8 +39,7 @@
     "react-native-screens": "~4.4.0",
     "react-native-vector-icons": "^10.2.0",
     "styled-components": "^6.1.14",
-    "yup": "^1.6.1",
-    "expo-location": "~18.0.5"
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

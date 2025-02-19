@@ -130,6 +130,37 @@ export const getProfileList = async () => {
 
 
 //-----ews wdv-------
+//----εδω παίρνω την δωτογραφια προφιλ συγκεκριμενου χρήστη με χρηση του id
+export const getProfileById = async (id) => {
+  try {
+    const profiles = await getProfileList(); // Παίρνεις όλα τα προφίλ
+    const usersData = await getUsersList(); //Παιρνει όλους τους χρήστες
+  
+    //παντρευουμε τις δυο λιστες
+    const combinedData = usersData.map((user, index) => {
+      return {
+        ...user,
+        profile: profiles[index],  // Προσθέτουμε το επαγγελματικό προφίλ στον χρήστη
+      };
+    });
+
+    const selectedProfile = combinedData.find(user => user.id === id)?.profile; // Φιλτράρεις με βάση το id
+    console.log('Found profile:', selectedProfile);
+    if (selectedProfile) {
+      console.log('imageeeeeeeeeeeeee:', selectedProfile.profile_picture);
+      return selectedProfile.profile_picture; // Επιστρέφει την φωτογραφία προφίλ αν το βρει
+      
+    } else {
+      console.log('Profile not found for id:', id);
+      return null; // Επιστρέφει null αν δεν βρει το προφίλ
+    }
+  } catch (error) {
+    console.error('Error fetching profile by id:', error);
+    return null; // Επιστρέφει null σε περίπτωση σφάλματος
+  }
+};
+
+//--εως εδω
 
 
 
