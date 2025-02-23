@@ -439,7 +439,7 @@ export const SkillsContainer = styled.View`
 `;
 
 export const Skill = styled.Text`
-  background-color: #007bff;
+  background-color:rgb(149, 156, 163);
   color: white;
   padding: 5px 10px;
   border-radius: 10px;
@@ -451,6 +451,15 @@ export const Skill = styled.Text`
 export const SmallRow=styled.View`
   flex-direction : row;
   margin: 5px;
+  
+
+`;
+
+export const SmallRow1=styled.View`
+  flex-direction : row;
+  margin: 1px;
+  background-color:rgb(245, 248, 252);
+  justify-content: center; /* Τα στέλνει στο κέντρο */
 
 `;
 

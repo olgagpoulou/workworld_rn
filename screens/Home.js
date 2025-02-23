@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, } from 'react-native';
 import { getProfileData , getUsersList, getProfileList } from "./../components/api";
 import  {useEffect,useState} from 'react';
 import * as SecureStore from 'expo-secure-store';
@@ -8,6 +8,7 @@ import axios from 'axios';
 import { ActivityIndicator } from 'react-native';
 import { FlatList } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
+import ProfileIndex from './../screens/ProfileIndex';
 
 
 
@@ -15,14 +16,12 @@ import {
   IndexContainer,
   IndexTopContainer,
   IndexBottomContainer1,
-  Image,
   Avatar,
-  PageTitle,
   SmallButton,
   Row,
   AppContainer,
   ImageBackground,
-  TouchableOpacity,
+  
 
   
   
@@ -162,7 +161,7 @@ const Home = () => {
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (
         
-
+        <TouchableOpacity onPress={() => navigation.navigate("ProfileIndex", {profileData: item})} >
 
         <View style={{ padding:10, flexDirection:'row', marginBottom:10, backgroundColor: 'rgba(255, 255, 255, 0.8)',  borderRadius: 10,
            
@@ -185,8 +184,8 @@ const Home = () => {
           {/* Πρόσθεσε οποιαδήποτε πεδία θέλεις από το προφίλ */}
         </View>
         </View>
-        
-     
+       </TouchableOpacity> 
+      
       )}
      
     />

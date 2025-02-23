@@ -24,6 +24,7 @@ import ConversationDetail from './../screens/ConversationDetail';
 import Messages from './../screens/Messages';
 import SplashScreenComponent from './../screens/SplashScreenComponent';
 import JitsiCallScreen from './../screens/JitsiCallScreen';
+import ProfileIndex from './../screens/ProfileIndex';
 
 
 
@@ -62,7 +63,7 @@ const RootStack = () => {
                 <Stack.Screen name="ConversationDetail" component={ConversationDetail}/>
                 <Stack.Screen name="JitsiCall" component={JitsiCallScreen} />
                 <Stack.Screen name="Messages" component={Messages}/>
-                
+                <Stack.Screen name="ProfileIndex" component={ProfileIndex}/>
                 <Stack.Screen name="EditProfile"
                               component={EditProfile}
                               initialParams={{ profileId: 'someId' }}  // Περνάς τα params

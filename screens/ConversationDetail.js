@@ -20,7 +20,7 @@ import {
     Avatar,
     SmallButton,
     Row,
-    SmallRow,
+    SmallRow1,
     RightIcon
     
     }
@@ -127,15 +127,15 @@ const ConversationDetail = ({ route, navigation }) => {
     <KeyboardAvoidingView style={{ flex: 1, padding: 10 }} behavior={Platform.OS === 'ios' ? 'padding' : null}>
        <IndexContainer>
         
-        <IndexTopContainer  width={'100%'} alignItem={'right'}>
-       <SmallRow>
+        <IndexTopContainer>
+       <SmallRow1 width={'380'} >
         <SmallButton onPress={startCall}>
         <SimpleLineIcons name="phone" size={29} color="black" />
            </SmallButton>
            <SmallButton onPress={startVideoCall}>
            <Feather name="video" size={29} color="black" />
            </SmallButton>
-           </SmallRow>
+           </SmallRow1>
         </IndexTopContainer> 
         
         <IndexBottomContainer1 >
