@@ -36,7 +36,7 @@ const ConversationList = () => {
     const navigation = useNavigation();
 
  // Κλήση API για να λάβουμε τις συνομιλίες
- useEffect(() => {
+
   const fetchConversations = async () => {
     const accessToken = await SecureStore.getItemAsync('accessToken');
 
@@ -47,7 +47,7 @@ const ConversationList = () => {
          
          console.log('AAAAAAAAAAAAAAAAAAAA:', userData.id);
 
-        // 1. Παίρνουμε τα δεδομένα των χρηστών
+        //  Παίρνουμε τα δεδομένα των χρηστών
         const usersList = await getUsersList();
         // Δημιουργία του map για τα ονόματα των χρηστών
            const usersMap = usersList.reduce((acc, user) => {
@@ -114,8 +114,20 @@ setConversations(conversationList); // Ενημερώνουμε την κατά�
     }
   };
 
+// useEffect για αρχική φόρτωση δεδομένων
+useEffect(() => {
   fetchConversations();
 }, []);
+
+// useEffect για ανανέωση όταν επιστρέφουμε στη σελίδα
+useEffect(() => {
+  const unsubscribe = navigation.addListener('focus', () => {
+      fetchConversations(); 
+  });
+
+  return unsubscribe;
+}, [navigation]);
+ 
 
   return (
 
@@ -172,6 +184,7 @@ setConversations(conversationList); // Ενημερώνουμε την κατά�
                    }}
            keyExtractor={item => item.id.toString()}
            renderItem={({ item }) => (
+           
             <TouchableOpacity
             onPress={() => {
                   console.log('Navigating to ConversationDetail with id:', item.id);
@@ -192,7 +205,6 @@ setConversations(conversationList); // Ενημερώνουμε την κατά�
                             
                             
               />
-             
             
                           <View>
                              <Text style={{ marginTop: 10, fontSize: 19, fontWeight: '600'}}>
@@ -203,19 +215,39 @@ setConversations(conversationList); // Ενημερώνουμε την κατά�
                                 Ημ/νια {new Date(item.created_at).toLocaleString()}
                             </Text>
                            
+                          
                            
                            </View>
+                           
+
+          {item.unread_messages > 0 && (
+    <View style={{
+      width: 24,
+      height: 24,
+      backgroundColor: 'red',
+      borderRadius: 9,
+      marginLeft: 15,
+      marginTop:20,
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
+      <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>
+        {item.unread_messages}
+      </Text>
+    </View>)}
+        
+
                        </View>
+                   
+          
+         
                   </TouchableOpacity>
            )}
          />
                     
                
                 
-      <Button
-        title="Νέα Συνομιλία"
-        onPress={() => navigation.navigate('ConversationDetail')}
-     />
+      
     
     </View>
     </BackgroundImage>

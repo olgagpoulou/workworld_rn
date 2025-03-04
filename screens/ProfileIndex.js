@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 import { View, Text, Image } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import  {useEffect,useState} from 'react';
@@ -49,7 +50,34 @@ const ProfileIndex= () => {
 
     const route = useRoute();
     const { profileData } = route.params; // Παίρνουμε τα δεδομένα που περάσαμε από την Home
-  
+ 
+    
+//Συνάρτηση μεσω της οποιας ελέγχουμε αν υπάρχει συνομιλια μεταξυ δυο χρηστων 
+//Αν δεν υπάρχει, την δημιουργούμε
+const handleStartConversation = async (receiverId) => {
+  try {
+    const accessToken = await SecureStore.getItemAsync('accessToken');
+    if (!accessToken) {
+      console.log('No access token available');
+      return;
+    }
+
+    const response = await axios.post(
+      'http://192.168.1.131:8000/api/conversations/create/',
+      { receiver_id: receiverId },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+
+    if (response.data.conversation_id) {
+      // Πλοήγηση στη σελίδα της συνομιλίας που δημιουργήθηκε
+      navigation.navigate('ConversationDetail', { conversationId: response.data.conversation_id });
+    }
+  } catch (error) {
+    console.error('Error creating conversation:', error);
+  }
+};
+
+
 // Συνάρτηση για να πάρω τις συντεταγμένες από την διεύθυνση εργασίας
 const getCoordinatesFromAddress = async (address) => {
     try {
@@ -123,14 +151,15 @@ const getCoordinatesFromAddress = async (address) => {
             </BoxView>
             <Name>{profileData.name ? profileData.name : "Φόρτωση..."}</Name>
             
-            <EditButton onPress={() => navigation.navigate("ConversationList")}>
+           
+              <EditButton onPress={() => handleStartConversation(profileData.id)}>
             <MaterialCommunityIcons
                  name='facebook-messenger'
                  size={29}
                  color='black'
              />
               </EditButton>
-               
+              
                </IndexInnerBoxContainer>
                       </IndexOuterBoxContainer>
                   </IndexTopContainer>

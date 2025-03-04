@@ -33,7 +33,7 @@ const ConversationDetail = ({ route, navigation }) => {
   const [newMessage, setNewMessage] = useState('');
   const [currentUserId, setCurrentUserId] = useState(null);
   const [isLoading, setIsLoading] = useState(false); // Προσθήκη loading state
-  
+ 
   //Συναρτήσεις για κλήση και βιντεοκλήση
   
   
@@ -78,7 +78,7 @@ const ConversationDetail = ({ route, navigation }) => {
             ...message,
             isCurrentUser: message.sender === currentUserId, // Συγκρίνουμε το sender με το currentUserId
           }));
-          setMessages(messagesWithSender); // Ενημερώνουμε τα μηνύματα
+          setMessages(messagesWithSender); // Ενημερώνουμε τα μηνύματα 
         } catch (error) {
           console.error('Error fetching messages:', error);
         } finally {
@@ -93,7 +93,24 @@ const ConversationDetail = ({ route, navigation }) => {
     fetchMessages(); // Φορτώνουμε τα μηνύματα
 
   }, [conversationId, isLoading]); // Καλείται ξανά όταν αλλάζει το conversationId ή isLoading
-
+ 
+ 
+  //Ελέγχουμε αν υπάρχουν αδιαβαστα μηνυματα ωστε να εμφανισουμε ενδειξη
+  useEffect(() => {
+    const markAsRead = async () => {
+      const accessToken = await SecureStore.getItemAsync('accessToken');
+      await axios.post(
+        `http://192.168.1.131:8000/api/conversations/${conversationId}/mark-read/`,
+        {}, 
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      );
+    };
+  
+    markAsRead();  // Όταν ανοίγει η συνομιλία, ενημερώνουμε το backend
+  }, [conversationId]);
+ 
+ 
+ 
   const handleSendMessage = async () => {
     if (!currentUserId) {
       console.log('Current user ID not fetched yet');
@@ -117,6 +134,7 @@ const ConversationDetail = ({ route, navigation }) => {
           { ...response.data, isCurrentUser: response.data.sender === currentUserId }
         ]);
         setNewMessage(''); // Άδειασμα του πεδίου
+      
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -148,6 +166,7 @@ const ConversationDetail = ({ route, navigation }) => {
       
       
       <FlatList
+       
         data={messages}
         renderItem={({ item }) => <MessageItem item={item} currentUserId={currentUserId} />}
         keyExtractor={item => (item.id ? item.id.toString() : item.message_id.toString())} // Έλεγχος για την ύπαρξη id
